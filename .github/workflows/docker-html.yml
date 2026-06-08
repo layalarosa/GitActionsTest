@@ -1,0 +1,36 @@
+name: Docker HTML
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t docker-html-test:ci .
+
+      - name: Run container
+        run: docker run -d --name docker-html-test -p 8080:80 docker-html-test:ci
+
+      - name: Test HTML response
+        run: |
+          for attempt in {1..10}; do
+            if curl --fail --silent http://localhost:8080 | grep -q "HTML de prueba en Docker"; then
+              exit 0
+            fi
+            sleep 1
+          done
+
+          docker logs docker-html-test
+          exit 1
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f docker-html-test
