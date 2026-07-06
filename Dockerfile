@@ -9,6 +9,8 @@ RUN npx --yes html-minifier-terser --collapse-whitespace --remove-comments --min
 
 FROM nginx:1.27-alpine AS production
 
+RUN apk add --no-cache curl
+
 COPY --from=build /build/index.html /usr/share/nginx/html/index.html
 COPY --from=build /build/version.txt /usr/share/nginx/html/version.txt
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
@@ -16,4 +18,4 @@ COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD wget -q -O /dev/null http://localhost/ || exit 1
+  CMD curl --fail --silent http://localhost/ || exit 1
