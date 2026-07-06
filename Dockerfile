@@ -3,8 +3,7 @@ FROM node:22-alpine AS build
 WORKDIR /build
 COPY index.html .
 
-RUN apk add --no-cache html-minifier && \
-    html-minifier --collapse-whitespace --remove-comments --minify-css \
+RUN npx --yes html-minifier-terser --collapse-whitespace --remove-comments --minify-css true \
       -o index.html index.html && \
     echo "BUILD_VERSION=$(date -u +%Y%m%d%H%M%S)" > /build/version.txt
 
