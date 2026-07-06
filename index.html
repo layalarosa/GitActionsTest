@@ -3,42 +3,46 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Docker HTML Test</title>
+    <title>Arquitectura Docker - CI/CD</title>
     <style>
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        font-family: Arial, sans-serif;
-        background: #f5f7fb;
-        color: #172033;
-      }
-
-      main {
-        width: min(90vw, 640px);
-        padding: 32px;
-        border: 1px solid #d8deea;
-        border-radius: 8px;
-        background: #ffffff;
-        box-shadow: 0 12px 32px rgb(23 32 51 / 10%);
-      }
-
-      h1 {
-        margin: 0 0 12px;
-        font-size: 2rem;
-      }
-
-      p {
-        margin: 0;
-        line-height: 1.5;
-      }
+      *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0}.card{width:min(90vw,720px);padding:40px;border:1px solid#334155;border-radius:12px;background:#1e293b;box-shadow:0 25px 50px -12px #0008}h1{margin:0 0 8px;font-size:2rem;color:#f8fafc}.sub{color:#94a3b8;margin:0 0 24px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}.svc{padding:16px;border:1px solid#334155;border-radius:8px;background:#0f172a;text-align:center}.svc h3{margin:0 0 4px;font-size:1.1rem;color:#38bdf8}.svc p{margin:0;font-size:.85rem;color:#94a3b8}.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.8rem;background:#334155;color:#cbd5e1;margin:0 4px 4px 0}.footer{margin-top:24px;font-size:.8rem;color:#64748b;border-top:1px solid#334155;padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap}
     </style>
   </head>
   <body>
-    <main>
-      <h1>HTML de prueba en Docker</h1>
-      <p>Este archivo se sirve desde un contenedor Nginx y se valida con GitHub Actions.</p>
-    </main>
+    <div class="card">
+      <h1>Arquitectura Docker & CI/CD</h1>
+      <p class="sub">Infraestructura moderna con contenedores, pipelines y despliegue automatizado</p>
+
+      <div class="grid">
+        <div class="svc"><h3>Nginx</h3><p>Reverse proxy + static files</p></div>
+        <div class="svc"><h3>Express API</h3><p>REST backend con Node.js</p></div>
+        <div class="svc"><h3>PostgreSQL</h3><p>Base de datos relacional</p></div>
+        <div class="svc"><h3>GitHub Actions</h3><p>CI/CD pipeline completo</p></div>
+      </div>
+
+      <div>
+        <span class="badge">Docker</span>
+        <span class="badge">Docker Compose</span>
+        <span class="badge">Multi-stage build</span>
+        <span class="badge">Healthcheck</span>
+        <span class="badge">Trivy</span>
+        <span class="badge">GHCR</span>
+        <span class="badge">Terraform</span>
+      </div>
+
+      <div class="footer">
+        <span id="version">Cargando version...</span>
+        <span>GitActionsTest</span>
+      </div>
+    </div>
+
+    <script>
+      fetch('/api/health')
+        .then(r=>r.json()).then(d=>console.log('API:',d.status))
+        .catch(()=>console.log('API: unreachable'));
+      fetch('/version.txt').then(r=>r.text()).then(t=>{
+        document.getElementById('version').textContent='Build: '+t.trim()
+      }).catch(()=>{});
+    </script>
   </body>
 </html>
